@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Faktura {{number}}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <style type="text/css">
+    @media print {
+      .d-print-none { display: none !important; }
+      .d-print-inline { display: inline !important; }
+      .d-print-inline-block { display: inline-block !important; }
+      .d-print-block { display: block !important; }
+      .d-print-table { display: table !important; }
+      .d-print-table-row { display: table-row !important; }
+      .d-print-table-cell { display: table-cell !important; }
+      .d-print-flex { display: flex !important; }
+      .d-print-inline-flex { display: inline-flex !important; }
+    }
+
+    @media print {
+      *, ::after, ::before { text-shadow: none !important; box-shadow: none !important; }
+      a:not(.btn) { text-decoration: underline; }
+      abbr[title]::after { content: " (" attr(title) ")"; }
+      pre { white-space: pre-wrap !important; }
+      blockquote, pre { border: 1px solid rgb(173, 181, 189); break-inside: avoid; }
+      thead { display: table-header-group; }
+      img, tr { break-inside: avoid; }
+      h2, h3, p { orphans: 3; widows: 3; }
+      h2, h3 { break-after: avoid; }
+      @page { size: a4; }
+      body { min-width: 992px !important; }
+      .container { min-width: 992px !important; }
+      .navbar { display: none; }
+      .badge { border: 1px solid rgb(0, 0, 0); }
+      .table { border-collapse: collapse !important; }
+      .table-bordered td, .table-bordered th { border: 1px solid rgb(222, 226, 230) !important; }
+      .table-dark { color: inherit; }
+      .table-dark tbody + tbody, .table-dark td, .table-dark th, .table-dark thead th { border-color: rgb(222, 226, 230); }
+    }
+  </style>
+  <script type="text/javascript">
+    const myFun = () => {
+      for (let i = 0; i < document.styleSheets[0].rules.length; i++) {
+        const ruleText = document.styleSheets[0].rules[i].cssText;
+        if (ruleText.startsWith('@media print')) {
+          document.styleSheets[0].deleteRule(i);
+        }
+      }
+    };
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="offset-4 col-4 text-center align-self-center">
+        <h3>Faktura</h3>
+      </div>
+      <div class="col-4">
+        <table class="table table-sm table-borderless">
+          <tr>
+            <td><strong>Numer:</strong></td>
+            <td>{{number}}</td>
+          </tr>
+          <tr>
+            <td><strong>Data wystawienia:</strong></td>
+            <td>{{issueDate}}</td>
+          </tr>
+          <tr>
+            <td><strong>Data sprzedaży:</strong></td>
+            <td>{{sellDate}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6 seller">
+        {{#with seller}}
+        <table class="table table-sm table-borderless">
+          <tbody>
+            <tr>
+              <td><strong>Sprzedawca:</strong></td>
+              <td>{{name}}</td>
+            </tr>
+            <tr>
+              <td><strong>Adres:</strong></td>
+              <td>{{address}}</td>
+            </tr>
+            <tr>
+              <td><strong>NIP:</strong></td>
+              <td>{{taxId}}</td>
+            </tr>
+          </tbody>
+        </table>
+        {{/with}}
+      </div>
+      <div class="col-6 buyer">
+        {{#with buyer}}
+        <table class="table table-sm table-borderless">
+          <tbody>
+            <tr>
+              <td><strong>Nabywca:</strong></td>
+              <td>{{name}}</td>
+            </tr>
+            <tr>
+              <td><strong>Adres:</strong></td>
+              <td>{{address}}</td>
+            </tr>
+            <tr>
+              <td><strong>NIP:</strong></td>
+              <td>{{taxId}}</td>
+            </tr>
+          </tbody>
+        </table>
+        {{/with}}
+      </div>
+    </div>
+    <div class="row col-12 items">
+      <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th class="text-center align-middle">Lp.</th>
+            <th class="text-center align-middle">Nazwa</th>
+            <th class="text-center align-middle">Ilość</th>
+            <th class="text-center align-middle">Jm</th>
+            <th class="text-center align-middle">Waluta</th>
+            <th class="text-center align-middle">Cena netto</th>
+            <th class="text-center align-middle">Wartość netto</th>
+            <th class="text-center align-middle">Stawka VAT</th>
+            <th class="text-center align-middle">Kwota VAT</th>
+            <th class="text-center align-middle">Wartość VAT</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each items}}
+          {{#with this}}
+          <tr>
+            <td class="text-center align-middle">{{inc @index}}</td>
+            <td class="text-center align-middle">{{name}}</td>
+            <td class="text-center align-middle">{{quantity}}</td>
+            <td class="text-center align-middle">{{unitOfMeasure}}</td>
+            <td class="text-center align-middle">{{currency}}</td>
+            <td class="text-center align-middle">{{toFixed nettoPrice 2}}</td>
+            <td class="text-center align-middle">{{toFixed nettoValue 2}}</td>
+            <td class="text-center align-middle">{{vatTax}}</td>
+            <td class="text-center align-middle">{{toFixed vatTaxValue 2}}</td>
+            <td class="text-center align-middle">{{toFixed bruttoValue 2}}</td>
+          </tr>
+          {{/with}}
+          {{/each}}
+        </tbody>
+        <tfoot>
+          <tr>
+            {{#with summary}}
+            <td colspan="6" class="text-center align-middle bg-dark text-light"><strong>Razem:</strong></td>
+            <td class="text-center align-middle">{{toFixed nettoValue 2}}</td>
+            <td>&nbsp;</td>
+            <td class="text-center align-middle">{{toFixed vatTaxValue 2}}</td>
+            <td class="text-center align-middle">{{toFixed bruttoValue 2}}</td>
+            {{/with}}
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="row mb-3">
+      <div class="col-4 p-3 border">
+        <strong>Do zapłaty:</strong> {{toFixed summary.bruttoValue 2}}
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-4 border">
+        <div class="row p-5 col-12">&nbsp;</div>
+        <div class="row col-12 text-center"><small>Imię i nazwisko osoby upoważnionej do odebrania dokumentu.</small></div>
+      </div>
+      <div class="offset-4 col-4 border">
+        <div class="row p-5 col-12">&nbsp;</div>
+        <div class="row col-12 text-center"><small>Imię i nazwisko osoby upoważnionej do wystawienia dokumentu.</small></div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    myFun();
+  </script>
+</body>
+</html>
